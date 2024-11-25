@@ -1,60 +1,47 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import { getSurveyItems, createSurvey } from "../WebDataService.js";
+import { DataGrid, GridColDef } from "@mui/x-data-grid";
+import Paper from "@mui/material/Paper";
+import DeleteIcon from "@mui/icons-material/Delete";
+import IconButton from "@mui/material/IconButton";
+import Tooltip from "@mui/material/Tooltip";
+// import { Link } from "react-router-dom";
+// import { getSurveyItems, createSurvey } from "../WebDataService.js";
 
 const SurveyListWidget = (props) => {
-  const [items, setItems] = useState([]);
+  const paginationModel = { page: 0, pageSize: 5 };
 
-  useEffect(() => {
-    updateSurveyList();
-  });
-
-  const updateSurveyList = () => {
-    getSurveyItems((currentItems) => {
-      setItems(currentItems);
-    });
-  };
-
-  const addNewSurvey = () => {
-    createSurvey((newItem) => {
-      props.history.push("/editsurvey/" + newItem.id.toString());
-    });
-  };
-
-  let list = [];
-  for (let i = 0; i < items.length; i++) {
-    const item = items[i];
-    list.push(
-      <li key={item.id}>
-        <Link to={`/editsurvey/${item.id}`}>{item.name}</Link>
-        <Link className="edit-link" to={`/editsurvey/${item.id}`}>
-          <button type="button" className="btn btn--primary">
-            Edit
-          </button>
-        </Link>
-        <button
-          type="button"
-          className="btn btn--danger"
-          onClick={() => {
-            removeSurvey(item.id);
-          }}
-        >
-          Remove
-        </button>
-      </li>
+  const deleteIcon = () => {
+    return (
+      <Tooltip title="Delete">
+        <IconButton>
+          <DeleteIcon />
+        </IconButton>
+      </Tooltip>
     );
-  }
+  };
 
-  if (list.length === 0) {
-    list.push(<li key={-1}>Your survey list is empty</li>);
-  }
+  const columns: GridColDef[] = [
+    { field: "id", headerName: "ID", width: 70 },
+    { field: "SurveyName", headerName: "First name", width: 200 },
+    { field: "Delete", headerName: "Delete", width: 150 },
+  ];
+
+  const rows = [
+    { id: 1, SurveyName: "Snow", Delete: deleteIcon() },
+    { id: 2, SurveyName: "Lannister" },
+  ];
 
   return (
     <div className="survey-list">
-      <ul>{list}</ul>
-      <button className="add-btn" type="button" onClick={addNewSurvey}>
-        Add New Survey
-      </button>
+      <Paper sx={{ height: "100%", width: "80%" }}>
+        <DataGrid
+          rows={rows}
+          columns={columns}
+          initialState={{ pagination: { paginationModel } }}
+          pageSizeOptions={[5, 10]}
+          sx={{ border: 0 }}
+        />
+      </Paper>
     </div>
   );
 };
