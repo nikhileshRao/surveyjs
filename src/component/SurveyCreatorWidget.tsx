@@ -13,7 +13,14 @@ const SurveyCreatorWidget = () => {
   };
 
   const creator = new SurveyCreator(creatorOptions);
+  creator.isAutoSave = true;
   creator.theme = themeJson;
+  
+  creator.saveSurveyFunc = (saveNo, callback) => { 
+    window.localStorage.setItem("survey-json", creator.text);
+    callback(saveNo, true);
+  }
+
 
   const style = { height: "100vh" };
 

@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import SurveyCreatorWidget from "./component/SurveyCreatorWidget.tsx";
 import SurveyListWidget from "./component/SurveyListWidget.tsx";
+import SurveyViewer from "./component/SurveyViewer.tsx"
 
 const App = () => {
   return (
@@ -11,7 +12,8 @@ const App = () => {
       </div>
       <Routes>
         <Route path="/" element={<SurveyListWidget />} />
-        <Route path="/editsurvey" element={<SurveyCreatorWidget />} />
+        <Route path="/editsurvey/:id" element={<SurveyCreatorWidget />} />
+        <Route path="/run/:id" element={<SurveyViewer />} />
       </Routes>
     </BrowserRouter>
     // <div className="App">
